@@ -1,0 +1,32 @@
+---
+const pathname = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? pathname === '/' : pathname.startsWith(href);
+
+const nav = [
+  { href: '/posts', label: 'Posts' },
+  { href: '/docs', label: 'Docs' },
+  { href: '/about', label: 'About' },
+];
+---
+
+<header class="border-b border-line bg-paper/80 backdrop-blur sticky top-0 z-10">
+  <div class="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="/" class="wordmark text-2xl text-ink hover:text-accent transition-colors">
+      Mika
+    </a>
+    <nav class="flex items-center gap-6 text-sm font-medium">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={[
+            'transition-colors',
+            isActive(item.href) ? 'text-accent' : 'text-ink-soft hover:text-ink',
+          ]}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</header>

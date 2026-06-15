@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts');
+  return posts.map((post) => ({
+    params: { slug: post.id.replace(/\.mdx?$/, '') },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = (d: Date) =>
+  d.toLocaleDateString('es-MX', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title={post.data.title} description={post.data.summary}>
+  <article class="max-w-3xl mx-auto px-6 py-16">
+    <p class="text-sm font-mono text-accent uppercase tracking-wider">
+      {post.data.cert ? `Post · ${post.data.cert}` : 'Post'}
+    </p>
+    <h1 class="mt-2 text-4xl md:text-5xl font-bold tracking-tight text-ink leading-tight">
+      {post.data.title}
+    </h1>
+    <p class="mt-4 text-lg text-ink-soft">{post.data.summary}</p>
+    <div class="mt-4 flex items-center gap-3 text-sm text-muted font-mono">
+      <span>{fmt(post.data.publishDate)}</span>
+      {post.data.readingMinutes && <span>· {post.data.readingMinutes} min lectura</span>}
+    </div>
+
+    <hr class="my-10 border-line" />
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <hr class="my-12 border-line" />
+    <p class="text-sm text-muted">
+      Por <a href="/about" class="text-ink-soft hover:text-accent underline underline-offset-2">Mikata Renji</a>
+      · <a href="/posts" class="text-ink-soft hover:text-accent underline underline-offset-2">Ver la serie completa</a>
+    </p>
+  </article>
+</BaseLayout>

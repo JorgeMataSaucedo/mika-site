@@ -1,0 +1,106 @@
+---
+// "ExecutionLog row" widget — la prueba más visceral del moat audit-honest.
+// Datos reales del ExecutionLog #981 (scaffold MikaRH del 2026-06-14).
+const row = {
+  id: 981,
+  correlationId: '0FF7A20E-AF22-432A-BC3C-DC203BB2416C',
+  operation: 'mika.scaffold_skeleton',
+  provider: 'anthropic',
+  model: 'claude-sonnet-4-6',
+  inputTokens: 1645,
+  outputTokens: 13276,
+  durationSec: 151,
+  status: 'ok',
+  costUsd: 0.20,
+  files: 29,
+  invokedVia: 'sse',
+};
+
+const fmt = (n: number) => n.toLocaleString('en-US');
+---
+
+<section class="border-b border-line bg-paper-soft">
+  <div class="max-w-5xl mx-auto px-6 py-20">
+    <div class="grid lg:grid-cols-5 gap-10 items-center">
+      <div class="lg:col-span-2">
+        <p class="text-sm font-mono text-accent uppercase tracking-wider">
+          audit-honest, en vivo
+        </p>
+        <h2 class="mt-2 text-3xl md:text-4xl font-bold tracking-tight text-ink leading-tight">
+          Cada llamada a Mika<br/>deja una fila como esta.
+        </h2>
+        <p class="mt-4 text-ink-soft leading-relaxed">
+          <code class="font-mono text-accent-ink text-sm">ExecutionLog</code> es la
+          tabla central del audit trail. Inmutable, con
+          <span class="font-semibold">CorrelationId trazable end-to-end</span>,
+          tokens por llamada, vendor usado, duración. Vive en SQL Server desde
+          el primer commit — no es feature, es propiedad.
+        </p>
+        <p class="mt-4 text-sm text-muted">
+          La fila de abajo es real. Es el demo del módulo de onboarding de RH
+          generado el 14 jun 2026 (29 archivos, $0.20 USD, 2.5 minutos).
+        </p>
+      </div>
+
+      <div class="lg:col-span-3">
+        <div class="bg-ink text-paper rounded-lg overflow-hidden shadow-xl border border-line">
+          {/* Window chrome */}
+          <div class="bg-ink-soft px-4 py-2.5 flex items-center gap-2 border-b border-paper/10">
+            <span class="w-2.5 h-2.5 rounded-full bg-red"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-yellow"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-green"></span>
+            <span class="ml-3 text-xs font-mono text-paper/60">
+              ExecutionLog · row #{row.id}
+            </span>
+          </div>
+
+          {/* Body */}
+          <div class="p-5 font-mono text-sm space-y-2.5">
+            <div class="flex justify-between gap-3">
+              <span class="text-paper/50">CorrelationId</span>
+              <span class="text-paper text-xs md:text-sm truncate">{row.correlationId}</span>
+            </div>
+            <div class="flex justify-between gap-3">
+              <span class="text-paper/50">Operation</span>
+              <span class="text-accent-soft">{row.operation}</span>
+            </div>
+            <div class="flex justify-between gap-3">
+              <span class="text-paper/50">Provider</span>
+              <span class="text-paper">
+                <span class="text-paper">{row.provider}</span>
+                <span class="text-paper/40 mx-1.5">·</span>
+                <span class="text-paper/80">{row.model}</span>
+              </span>
+            </div>
+            <div class="flex justify-between gap-3">
+              <span class="text-paper/50">Tokens (in / out)</span>
+              <span class="text-paper">
+                {fmt(row.inputTokens)} <span class="text-paper/40">/</span> {fmt(row.outputTokens)}
+              </span>
+            </div>
+            <div class="flex justify-between gap-3">
+              <span class="text-paper/50">Duration</span>
+              <span class="text-paper">{row.durationSec}s</span>
+            </div>
+            <div class="flex justify-between gap-3">
+              <span class="text-paper/50">Cost</span>
+              <span class="text-paper">${row.costUsd.toFixed(2)} USD</span>
+            </div>
+            <div class="flex justify-between gap-3">
+              <span class="text-paper/50">Files generated</span>
+              <span class="text-paper">{row.files}</span>
+            </div>
+            <div class="flex justify-between gap-3 pt-2 border-t border-paper/10">
+              <span class="text-paper/50">Status</span>
+              <span class="text-green font-bold uppercase">{row.status}</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-4 text-xs text-muted font-mono text-center md:text-right">
+          Query SQL: <code>SELECT * FROM ExecutionLog WHERE ExecutionLogId = 981;</code>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
